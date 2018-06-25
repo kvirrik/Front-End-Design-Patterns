@@ -17,6 +17,10 @@ _Bachelors thesis in Computer Sciences. Supervisor: Nino Kiviladze_
     * [დიზაინ პატერნების სტრუქტურა](#pattern_structure)
     * [ანტი პატერნები](#anti_patterns)
     * [დიზაინ პატერნების კატეგორიები](#pattern_categories)
+      - [Creational კატეგორიის დიზაინ პატერნები](#creational)
+      - [Structural კატეგორიის დიზაინ პატერნები](#structural)
+      - [Behavioral კატეგორიის დიზაინ პატერნები](#behavioral)
+        
 
 
     
