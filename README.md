@@ -9,14 +9,14 @@ _Bachelors thesis in Computer Sciences. Supervisor: Nino Kiviladze_
 1.  [რეზიუმე](#abstract)
 1.  [შესავალი](#introduction)
 1.  [თავი 1: ლიტერატურის მიმოხილვა](#literature_review)
-* [მიმოხილვა](#review_1)
-* [დიზაინ პატერნების სიტორია](#history)
-* [რა არის პატერნი?](#what_is_pattern)
-* [ჩვენ ყოველდღე ვიყენებთ პატერნებს](#everyday_pattern)
-* [Proto-პატერნების ისტორია და "3 წესი"](#proto_patterns)
-* [დიზაინ პატერნების სტრუქტურა](#pattern_structure)
-* [ანტი პატერნები](#anti_patterns)
-* [დიზაინ პატერნების კატეგორიები](#pattern_categories)
+    * [მიმოხილვა](#review_1)
+    * [დიზაინ პატერნების სიტორია](#history)
+    * [რა არის პატერნი?](#what_is_pattern)
+    * [ჩვენ ყოველდღე ვიყენებთ პატერნებს](#everyday_pattern)
+    * [Proto-პატერნების ისტორია და "3 წესი"](#proto_patterns)
+    * [დიზაინ პატერნების სტრუქტურა](#pattern_structure)
+    * [ანტი პატერნები](#anti_patterns)
+    * [დიზაინ პატერნების კატეგორიები](#pattern_categories)
 
 
     
