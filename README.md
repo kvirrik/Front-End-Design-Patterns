@@ -207,3 +207,59 @@ Alexander-ის სიტყვები რომ გავიხსენო�
 ### <a name='pattern_categories'>დიზაინ პატერნების კატეგორიები</a>
 
 დიზაინ პატერნები შეიძლება ჩაშლილი იყოს სხვადასხვა კატეგორიებად. ამ თავში განვიხილავთ 3 ძირითად კატეგორიას და მოკლედ მიმოვიხილავთ იმ პატერნებს, რომლებიც ერთიანდებიან ამ კატეგორიებში.
+
+##### <a name='creational'>Creational კატეგორიის დიზაინ პატერნები</a>
+
+creational დიზაინ პატერნები ფოკუსირდებიან ობიექტის შექმნის(object creation) მექანიზმის მართვაზე, სადაც ობიექტები იქმნებიან ისე, როგორც ეს მუშაობის დროს არსებული სიტუაციისთვის არის შესაფერისი. ობიექტის შექმნის ძირითადმა მიდგომამ შეიძლება გამოიწვიოს დამატებითი სირთულეები პროექტში, ხოლო ამ პატერნების მიზანია გადაჭრან ეს პრობლემა შექმნის პროცესის გაკონტროლებით.
+
+პატერნები, რომლებიც ამ კატეგორიაში გადიან არის: **Constructor**, **Factory**, **Abstract**, **Prototype**, **Singleton** და **Builder**.
+
+##### <a name='structural'>Structural კატეგორიის დიზაინ პატერნები</a>
+
+Structural პატერნები დაინტერესებული არიან ობიექტის შემადგენლობით და როგორც წესი, გამოკვეთენ მარტივ გზებს იმის გასაანალიზებლად, თუ როგორ არიან დაკავშირებული ერთმანეთთან სხვადასხვა ობიექტები. ისინი გვეხმარებიან იმის უზრუნველყოფაში, რომ სისტემის ერთ ნაწილში ცვლილებების შემთხვევაში, არ უნდა იყოს საჭიროება იმის რომ მთელი სისტემის სტქრუქტურა შეიცვალოს.
+
+პატერნები, რომლებიც ამ კატეგორიაში გადიან, არის: **Decorator**, **Facade**, **Adapter** და **Proxy**.
+
+##### <a name='behavioral'>Behavioral კატეგორიის დიზაინ პატერნები</a>
+
+behavioral დიზაინ პატერნები ფოკუსირებული არიან სისტემის განსხვავებულ
+ობიექტებს შორის კომუნიკაციის გაუმჯობესებაზე ან გამარტივებაში.
+
+Behavioral პატერნები მოიცავს: **Iterator**, **Mediator**, **Observer** და **Visitor**.
+
+იმისათვის, რომ უფრო ნათელი გახდეს დიზაინ პატერნების კატეგორიებად კლასიფიკაცია, ქვემოთ მოყვანილია შესანიშნავი ცხრილი ამასთან დაკავშირებით:
+
+|                         |                                                                                                                                               |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Creational**          | Based on the concept of creating an object.                                                                                                   |
+| _**Class**_             |
+| Factory Method          | This makes an instance of several derived classes based on interfaced data or events.                                                         |
+| _**Object**_            |
+| Abstract Factory        | Creates an instance of several families of classes without detailing concrete classes.                                                        |
+| Builder                 | Separates object construction from its representation, always creates the same type of object.                                                |
+| Prototype               | A fully initialized instance used for copying or cloning.                                                                                     |
+| Singleton               | A class with only a single instance with global access points.                                                                                |
+| **Structural**          | Based on the idea of building blocks of objects.                                                                                              |
+| _**Class**_             |
+| Factory Method          | Match interfaces of different classes therefore classes can work together despite incompatible interfaces.                                    |
+| _**Object**_            |
+| Adapter                 | Match interfaces of different classes therefore classes can work together despite incompatible interfaces.                                    |
+| Bridge                  | Separates an object's interface from its implementation so the two can vary independently.                                                    |
+| Composite               | A structure of simple and composite objects which makes the total object more than just the sum of its parts.                                 |
+| Decorator               | Dynamically add alternate processing to objects.                                                                                              |
+| Facade                  | A single class that hides the complexity of an entire subsystem.                                                                              |
+| Flyweight               | A fine-grained instance used for efficient sharing of information that is contained elsewhere.                                                |
+| Proxy                   | A place holder object representing the true object.                                                                                           |
+| **Behavioral**          | Based on the way objects play and work together.                                                                                              |
+| _**Class**_             |
+| Interpreter             | A way to include language elements in an application to match the grammar of the intended language.                                           |
+| Template Method         | Creates the shell of an algorithm in a method, then defer the exact steps to a subclass.                                                      |
+| _**Object**_            |
+| Chain of Responsibility | A way of passing a request between a chain of objects to find the object that can handle the request.                                         |
+| Command                 | Encapsulate a command request as an object to enable, logging and/or queuing of requests, and provides error-handling for unhandled requests. |
+| Iterator                | Sequentially access the elements of a collection without knowing the inner workings of the collection.                                        |
+| Mediator                | Defines simplified communication between classes to prevent a group of classes from referring explicitly to each other.                       |
+| Observer                | A way of notifying change to a number of classes to ensure consistency between the classes.                                                   |
+| State                   | Alter an object's behavior when its state changes.                                                                                            |
+| Strategy                | Encapsulates an algorithm inside a class separating the selection from the implementation.                                                    |
+| Visitor                 | Adds a new operation to a class without changing the class.                                                                                   |
