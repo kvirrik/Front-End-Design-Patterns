@@ -35,7 +35,7 @@ _Bachelors thesis in Computer Sciences. Supervisor: Nino Kiviladze_
       - [Constructor პატერნი](#constructor_pattern)
       - [Module პატერნი](#module_pattern)
       - [Singleton პატერნი](#singleton_pattern)
-      - [Observer პატერნი](#cobserver_pattern)
+      - [Observer პატერნი](#observer_pattern)
       - [Facade პატერნი](#facade_pattern)
       - [Decorator პატერნი](#decorator_pattern)
 1.  [შეჯამება](#summarize)
@@ -404,3 +404,395 @@ const input$ = Rx.Observable.fromEvent(node, 'input')
 - ჩვენ ვიღებთ საბოლოო მნიშვნელობას `.subscribe()` ბლოკის საშუალებით
 
 მოკლედ, `operator`-ი, როგორც წესი აბრუნებს ახალ ობზერვებლს ყოველ ჯერზე, რაც გვაძლევს საშუალებას გავაგრძელოთ სტრიმი. როგორც მომხმარებლებმა, ჩვენ არ უნდა ვიღელვოთ ყველა იმ ობზერვებლზე და ობზერვერზე რაც სცენის მიღმა იქმნება და გამოიყენება. ჩვენ თითოეულ ჯაჭვში ვიყენებთ მხოლოდ ერთს - `subscritpion`-ს.
+
+### <a name='javascript_patterns'>Javascript დიზაინ პატერნები</a>
+
+ამ თავში განხილული იქნება Javascript პროგრამირების ენისათვის დამახასითებელი დიზაინ პატერნები და მოყვანილი იქნება არაერთი მაგალითი იმის შესახებ თუ როგორ ხდება ამა თუ იმ პატერნის იმპლემენტაცია ჯავასკრიპტის სინტაქსში.
+
+დეველოპერები ხშირად ინტერესდებიან იმით, არის თუ არა ისეთი პატერნი ან პატერნთა ერთობლიობა, რომელსაც აუცილებლად უნდა იყენებდნენ მუშაობის დროს. ამ კითხვაზე ერთი სწორი პასუხი არ არსებობს. თითოეული სკრიპტი თუ ვებ-აპლიკაცია, რომელზეც ჩვენ ვმუშაობთ, გააჩნია თავისი ინდივიდუალური საჭიროებები და ჩვენ უნდა ვიფიქროთ იმაზე, სად შეიძლება პატერნმა რეალური შედეგი აჩვენოს იმპლემენტაციისას.
+
+მაგალითად, ზოგიერთმა პროექტმა შეიძლება სარგებელი მიიღოს `decoupling`-ისგან, რომელსაც გვთავაზობს `Observer` პატერნი, ხოლო ზოგიერთი შეიძლება ძალზედ მცირე პროექტი აღმოჩნდეს `decoupling`-ისთვის.
+
+რომ განვაცხადოთ, მაშინ როცა მყარი მოთხოვნილება გვაქვს დიზაინ პატერნების გამოყენების და ამასთანავე გვაქვს ისეთი სპეციფიკური პრობლემები, რომლებიც საუკეთესოდ შეეფერება მათ, ბევრად უფრო მარტივი ხდება აპლიკაციის არქიტექტურაში პატერნების ინტეგრაცია.
+
+პატერნები, რომლებსაც ქვემოთ დეტალურად განვიხილავ, არის:
+
+- Constructor
+- Module Pattern
+- Singleton
+- Observer
+- Facade
+- Decorator
+
+#### <a name='constructor_pattern'>Constructor პატერნი</a>
+
+კლასიკური ობიექტზე-ორიენტირებულ პროგრამირების ენებში, კონსტრუქტორი არის სპეციალური მეთოდი , რომელიც გამოიყენება იმისთვის რომ ინიციალიზება გაუკეთოს ახლად შექმნილ ობიექტს, მას შემდეგ რაც მეხსიერება გამოიყოფა მისთვის. ჯავასკრიპტში ყველაფერი არის ობიექტი, რაც იმას ნიშნავს რომ უმეტესი ინტერესი იქნება ობიექტის კონსტრუქტორებზე.
+
+Object Constructor-ები სპეციფიური ტიპის ობიექტების შესაქმნელად გამოიყენება - იგი ასრულებს ორივეს: როგორც ობიექტს ამზადებს გამოყენებისთვის, ასევე იღებს არგუმენტებს, რომ წევრ property-ებს და მეთოდებს მიანიჭოს საწყისი მნიშვნელობები (ინიციალიზაცია).
+
+**Object Creation**
+
+ობიექტის შექმნისთვის ჯავასკრიპტში არსებობს სამი გზა:
+
+```js
+// 1
+var newObject = {};
+// 2
+var newObject = Object.create(Object.prototype);
+// 3
+var newObject = new Object();
+```
+
+**Basic Constructors**
+
+როგორც უკვე ვნახეთ, Javascript-ს კლასების კონცეპტის მხარდაჭერა არ გააჩნია, მაგრამ იგი გვთავაზობს სპეციალურ constructor ფუქნციებს, რომლებიც ობიექტებთან მუშაობენ. კონსტრუქტორ ფუნქციის გამოძახებაზე “new” სიტყვის დამატებით , ჩვენ ვეუბნებით ჯავასკრიპტს, რომ ფუნქცია გვინდა “იქცეოდეს” ისე, როგორც კონსტრუქტორი და და ობიექტს ინსტანციაცია გაუკეთოს მის მიერ შექმნილი წევრებით.
+
+ძირითადი კონსტრუქტორი ჯავასკრიპტში შეიძლება გამოყურებოდეს ასე:
+
+```js
+function Car(model, year, miles) {
+  this.model = model;
+  this.year = year;
+  this.miles = miles;
+
+  this.toString = function() {
+    return this.model + ' has done ' + this.miles + ' miles';
+  };
+}
+
+var civic = new Car('Honda Civic', 2009, 20000);
+var mondeo = new Car('Ford Mondeo', 2010, 5000);
+
+console.log(civic.toString());
+console.log(mondeo.toString());
+```
+
+ზემოთ მოყვანილი კოდი არის constructor პატერნის მარტივი ვერსია, მაგრამ მას რამდენიმე პრობლემა მაინც აქვს: პირველი, ის მემკვიდრეობითობას რთულს ხდის და მეორე, toString()-ის მსგავსი ფუნქციების თავიდან განსაზღვრა ხდება Car კონსტრუქტორის გამოყენებით შექმნილი ყოველი ახალი ობიექტისთვის. მსაგავსი ფუქნციები იდეალურად უნდა იყოს გაზიარებული Car ტიპის ყველა ინსტანსისათვის.
+
+**Constructors with Prototypes**
+
+ფუნქციები, როგორც ყველა ობიექტი ჯავასკრიპტში შეიცავს `“prototype”` ობიექტს. როცა კონსტრუქტორს ვიძახებთ ობიექტის შესაქმნელად, კონსტრუქტორის prototype-ის ყველა property ხელმისაწვდომი ხდება ახალი ობიექტებისთვის. ამ გზით, მრავალი `Car` ობიექტის შექმნა იქნება შესაძლებელი, რომელთაც წვდომა ექნებათ ერთსა და იმავე `prototype` ობიექტზე. პირველი მაგალითი შეგვიძლია შემდეგნაირად განვავრცოთ:
+
+```js
+Car.prototype.toString = function() {
+  return this.model + ' has done ' + this.miles + ' miles';
+};
+```
+
+ამ გზით, `toString()` მეთოდის ერთი ეგზემპლიარი (`Instance`) ხელმისაწვდომი იქნება ყველა `Car` ობიექტისთვის.
+
+#### <a name='module_pattern'>Module პატერნი</a>
+
+**Modules**
+
+მოდულები არის ნებისმიერი ძლიერი აპლიკაციის არქიტექტურის განუყოფელი ნაწილი და როგორც წესი, ხელს უწყობენ პროექტის კოდის ნაწილების შენახვას როგორც ორგანიზებულად, ასევე სუფთად დაყოფილად. Javascript-ში მოდულების იმპლემენტაციის რამდენიმე გზა არსებობს:
+
+- The Module Pattern
+- Object literal notation
+- AMD modules
+- CommonJS modules
+
+ჩვენ განვიხილავთ მხოლოდ პირველ ორ შემთხვევას. Module პატერნი ეფუძნება გარკვეულწილად `Object Literal`-ს, შესაბამისად უმჯობესი იქნება პირველ რიგში გავიხსენოთ რას წარმოადგენს ის.
+
+**Object Literals**
+
+`Object literal`-ის ნოტაციაში ობიექტი აღწერილია, როგორც მძიმით გამოყოფილი key/value წყვილები, შემოსაზღვრული ხვეული ფრჩხილებით (`Curly Brace: {}`). სახელები ობიექტის შიგნით შეიძლება იყოს როგორც სტრიქონი (`String`), ასევე იდენტიფიკატორები, ერთმანეთისაგან გამოყოფილი მძიმით. საბოლოო `key/value` წყვილის ბოლოში მძიმის დაწერამ შესაძლოა შეცდომები გამოიწვიოს.
+
+```js
+var myObjectLiteral = {
+  variableKey: variableValue,
+
+  functionKey: function() {
+    // ...
+  }
+};
+```
+
+`Object Literal`-ი ინსტანციაციას არ საჭიროებს `new` ოპერატორით. ობიექტის გარეთ ახალი წევრის დამატება შესაძლებელია შემდეგნაირად: `myObjectLiteral.property = “someValue”`;
+
+ქვემოთ შეგვიძლია ვნახოთ მოდულის შედარებით გართულებული ვარიანტი.
+
+```js
+var myModule = {
+  myProperty: 'someValue',
+  myConfig: {
+    useCaching: true,
+    language: 'en'
+  },
+
+  saySomething: function() {
+    console.log('Where in the world is Paul Irish today?');
+  },
+
+  reportMyConfig: function() {
+    console.log(
+      'Caching is: ' + (this.myConfig.useCaching ? 'enabled' : 'disabled')
+    );
+  },
+
+  updateMyConfig: function(newConfig) {
+    if (typeof newConfig === 'object') {
+      this.myConfig = newConfig;
+      console.log(this.myConfig.language);
+    }
+  }
+};
+
+myModule.saySomething();
+
+myModule.reportMyConfig();
+
+myModule.updateMyConfig({
+  language: 'fr',
+  useCaching: false
+});
+
+myModule.reportMyConfig();
+```
+
+რომ შევაჯამოთ, `object literals`-ი მძლავრი საშუალებაა ენკაფსულაციის და კოდის ორგანიზებისათვის. აპლიკაცია იყოფა ცალკე მდგომ, დამოუკიდებელ მოდულებად. იმავე საქმეს ემსახურება ზემოთ ხსენებული Module პატერნი. ის თავის თავში იყენებს, რა თქმა უნდა, Object Literal-ს, ოღონდ როგორც დასაბრუნებელ მნიშვნელობას `scoping` ფუნქციიდან.
+
+**The Module პატერნი**
+
+Module პატერნი თავდაპირველად განისაზღვრა, როგორც პროგრამულ ინჟინერიაში კლასებისათვის დახურული (Private) და ღია (Public) ენკაფსულაციის საშუალება. ჯავასკრიპტში, მოდულ პატერნი გამოიყენება იმისთვის რომ მიბაძოს კლასების კონცეფციას იმ გზით, რომ ჩვენ შეგვეძლოს ერთ ობიექტში public/private მეთოდების და ცვლადების მოქცევა. ამგვარად, ვიცავთ კონკრეტულ ნაწილს გლობალური scope-გან. შედეგად თავიდან ვიცილებთ ფუნქციის სახელებთან დაკავშირებულ კონფლიქტებს, სადაც ერთი და იგივე სახელი შეიძლება კოდის სხვა ნაწილშიც იყოს გამოყენებული. მოდულები ლოკალურ გარემოს ქმნიან და ერთმანეთისგან იზოლირებული არიან. ეს პატერნი საკმაოდ გამოსადეგია უსაფრთხოების და შეღწევადობის ასპექტშიც, რადგან იგი შედგება public და private მეთოდებით, მაგრამ მოდულის გარეთ მხოლოდ public API ბრუნდება. ასე რომ, დეველოპერს გარედან წვდომა არ ექნება მოდულის private property-ებზე.
+
+```js
+var myNamespace = (function() {
+  var myPrivateVar, myPrivateMethod;
+
+  // A private counter variable
+  myPrivateVar = 0;
+
+  // A private function which logs any arguments
+  myPrivateMethod = function(foo) {
+    console.log(foo);
+  };
+
+  return {
+    // A public variable
+    myPublicVar: 'foo',
+
+    // A public function utilizing privates
+    myPublicFunction: function(bar) {
+      // Increment our private counter
+      myPrivateVar++;
+
+      // Call our private method using bar
+      myPrivateMethod(bar);
+    }
+  };
+})();
+```
+
+#### <a name='singleton_pattern'>Singleton პატერნი</a>
+
+**Singleton** პატერნი საკმაოდ ცნობილი პატერნია, რადგან ის ზღუდავს კლასის ინსტანციაციას ერთ ობიექტზე. მისი იმპლემენტირება შესაძლებელია კლასის შექმნით, რომელსაც ექნება მეთოდი, რომელიც შექმნის კლასის ახალ ინსტანსს, თუ აქამდე არ არსებობდა, ხოლო არსებობის შემთხვევაში კი მარტივად დააბრუნებს ობიექტის უკვე არსებულ რეფერენსს. სინგლტონის იმპლმენეტაცია შემდეგნაირად შეგვიძლია:
+
+```js
+var mySingleton = (function() {
+  // Instance stores a reference to the Singleton
+  var instance;
+  function init() {
+    function privateMethod() {
+      console.log('I am private');
+    }
+    var privateVariable = 'Im also private';
+    var privateRandomNumber = Math.random();
+
+    return {
+      publicMethod: function() {
+        console.log('The public can see me!');
+      },
+      publicProperty: 'I am also public',
+      getRandomNumber: function() {
+        return privateRandomNumber;
+      }
+    };
+  }
+
+  return {
+    getInstance: function() {
+      if (!instance) {
+        instance = init();
+      }
+      return instance;
+    }
+  };
+})();
+// Usage:
+var singleA = mySingleton.getInstance();
+var singleB = mySingleton.getInstance();
+console.log(singleA.getRandomNumber() === singleB.getRandomNumber()); // true
+```
+
+#### <a name='observer_pattern'>Observer პატერნი</a>
+
+**Observer** პატერნი არის დიზაინ პატერნი, სადაც ობიექტი (ცნობილი, როგორც `subject`) ინახავს მასზე დამოკიდებული ობიექტების სიას (`Observers`). იგი ავტომატურად ატყობინებს მათ მდგომარეობის (`State`) ნებისმიერ ცვლილებას.
+
+როდესაც `subject`-ს ესაჭიროება რაიმე ქმედების შესახებ აცნობოს ობზერვერებს, ის გადასცემს (`Broadcasts`) შეტყობინებას მათ (რომელიც შეიძლება შეიცავდეს სპეციფიკურ ინფორმაციას ამ შეტყობინებასთან დაკავშირებით). როცა აღარ გვსურს რომ რომელიმე ობზერვერმა მიიღოს სიახლეები ცვლილებებთან დაკავშირებით, `subject`-ს შეუძლია ამოიღოს ისინი ობზერვერების სიიდან.
+
+პირველ რიგში შევქმნათ იმ ობზერვერების სია და მეთოდები, რომელიც `Subject`-ს შეიძლება ჰქონდეს.
+
+```js
+function ObserverList() {
+  this.observerList = [];
+}
+ObserverList.prototype.add = function(obj) {
+  return this.observerList.push(obj);
+};
+ObserverList.prototype.count = function() {
+  return this.observerList.length;
+};
+ObserverList.prototype.get = function(index) {
+  if (index > -1 && index < this.observerList.length) {
+    return this.observerList[index];
+  }
+};
+ObserverList.prototype.removeAt = function(index) {
+  this.observerList.splice(index, 1);
+};
+ObserverList.prototype.indexOf = function(obj, startIndex) {
+  var i = startIndex;
+
+  while (i < this.observerList.length) {
+    if (this.observerList[i] === obj) {
+      return i;
+    }
+    i++;
+  }
+  return -1;
+};
+```
+
+ხოლო შემდეგ შევქმნათ `Subject` და მეთოდები, რომლებიც საშუალებას მისცემს მას დაამატოს, წაშალოს ან აცნობოს `Observer`-ს:
+
+```js
+function Subject() {
+  this.observers = new ObserverList();
+}
+
+Subject.prototype.addObserver = function(observer) {
+  this.observers.add(observer);
+};
+
+Subject.prototype.removeObserver = function(observer) {
+  this.observers.removeAt(this.observers.indexOf(observer, 0));
+};
+
+Subject.prototype.notify = function(context) {
+  var observerCount = this.observers.count();
+  for (var i = 0; i < observerCount; i++) {
+    this.observers.get(i).update(context);
+  }
+};
+```
+
+ზემოთ წარმოდგენილ მაგალითში, ჩვენ ვნახეთ როგორ შეიძლება `Observer` პატერნის ჯავასკრიპტში იმპლემენტირება. გავიგეთ `Subject`-ის და `Observer`-ის კონცეფცია და მასთან დაკავშირებული სტრუქტურა.
+
+#### <a name='facade_pattern'>Facade პატერნი</a>
+
+**Façade** პატერნი ობიექტზე-ორიენტირებული პროგრამირებისთვის დამახასიათებელი ერთ-ერთი ძირითადი პატერნია. `Facade` არის ობიექტი, რომელიც გვაწვდის გამარტივებულ ინტერფეისს კოდის დიდი ნაწილისათვის. იგი მალავს კოდის რეალურ სირთულეებს და კომპლექსურობას. მას შეუძლია:
+
+- პროგრამული ბიბლიოთეკა გახადოს უფრო მარტივად გამოყენებადი, აღქმადი და ტესტირებადი, რადგან მას გააჩნია მოსახერხებელი მეთოდები საერთო დავალებებისთვის (`Tasks`).
+- გახადოს პროგრამული ბიბლიოთეკა უფრო წაკითხვადი.
+- შეამციროს დამოკიდებულებები გარე კოდზე შიდა სამუშაოებისთვის.
+- შეფუთოს `API`-ის ცუდად შემუშავებული კოლექცია, ერთი კარგად დამშავებული `API`-ით.
+
+**Façade** პატერნი როგორც, უკვე ვთქვით, შედარებით რთული ინტერფეისის გამარტივებულ ვერსიას გვთავაზობს. ამასთანავე, იგი აცალკევებს კლასს იმ კოდისგან, რომელსაც იყენებს. ეს საშუალებას გვაძლევს არაპირდაპირი კავშირი გვქონდეს ქვესისტემებთან (`Subsystems`), რაც ნაკლებად წარმოქმნის შეცდომებს(`errors`), ვიდრე მათზე პირდაპირი წვდომისას.
+
+```js
+var Mortgage = function(name) {
+  this.name = name;
+};
+Mortgage.prototype = {
+  applyFor: function(amount) {
+    // access multiple subsystems...
+    var result = 'approved';
+    if (!new Bank().verify(this.name, amount)) {
+      result = 'denied';
+    } else if (!new Credit().get(this.name)) {
+      result = 'denied';
+    } else if (!new Background().check(this.name)) {
+      result = 'denied';
+    }
+    return this.name + ' has been ' + result + ' for a ' + amount + ' mortgage';
+  }
+};
+var Bank = function() {
+  this.verify = function(name, amount) {
+    // complex logic ...
+    return true;
+  };
+};
+var Credit = function() {
+  this.get = function(name) {
+    // complex logic ...
+    return true;
+  };
+};
+var Background = function() {
+  this.check = function(name) {
+    // complex logic ...
+    return true;
+  };
+};
+function run() {
+  var mortgage = new Mortgage('Joan Templeton');
+  var result = mortgage.applyFor('$100,000');
+  alert(result);
+}
+```
+
+#### <a name='decorator_pattern'>Decorator პატერნი</a>
+
+დეკორატორები არიან სტრუქტურული დიზაინ პატერნები, რომლებიც მიზნად ისახავენ არსებული კოდის ხელახლა გამოყენებას (`Re-use`). ისინი შეიძლება ჩაითვალონ ობიექტის `sub-classing`-ის კიდევ ერთ ეფექტურ ალტერნატივად.
+
+კლასიკური გაგებით, დეკორატორები გვთავაზობენ შესაძლებლობას ახალი მახასიათებელი დავამატოთ არსებულ კლასს დინამიურად. ისინი შეიძლება გამოყენებულ იქნას არსებული სისტემების მოდიფიცირებისთვის, მაშინ როცა გვსურს ახალი შესაძლებლობის (`Feature`) დამატება ობიექტზე, მძიმე ჩარევებისა და კოდის ძირეული ცვლილების გარეშე. საერთი მიზეზი, რის გამოც დეველოპერები დეკორატორებს იყენებენ, არის ის, რომ მათი აპლიკაციები შესაძლოა შეიცავდნენ ისეთ ფუნქციონალს, რომლებიც საჭიროებენ დიდი რაოდენობით სხვადასხვა ტიპის ობიექტებს. დეკორატორის იმპლემენტაცია ასე გამოიყურება ჯავასკრიპტში:
+
+```js
+// The constructor to decorate
+function MacBook() {
+  this.cost = function() {
+    return 997;
+  };
+  this.screenSize = function() {
+    return 11.6;
+  };
+}
+// Decorator 1
+function memory(macbook) {
+  var v = macbook.cost();
+  macbook.cost = function() {
+    return v + 75;
+  };
+}
+// Decorator 2
+function engraving(macbook) {
+  var v = macbook.cost();
+  macbook.cost = function() {
+    return v + 200;
+  };
+}
+var mb = new MacBook();
+memory(mb);
+engraving(mb);
+insurance(mb);
+
+console.log(mb.cost()); // Outputs: 1522
+console.log(mb.screenSize()); // Outputs: 11.6
+```
+
+## <a name='summarize'>შეჯამება</a>
+
+სულ ეს არის შეცნობით თავგადასავალი დიზაინ პატერნების სამყაროში. Javascript-თან და სხვა მრავალ ფრონტ-ენტ ფრეიმვორკთან თუ ენასთან ერთად. ვიმედოვნებ რომ ეს ყველაფერი ოდნავ მაინც ინფორმაციული და სასარგებლო იქნება.
+
+დიზაინ პატერნები მარტივს ხდის დავეყრდნოთ იმ დეველოპერების მხრებს, რომლებმაც შეიმუშავეს რთული და გამომწვევი პრობლემების ეფექტური გადაჭრის მეთოდოლოგია. ამ ნაშრომის შიგთავსი იმედია უზრუნველყოფს საკმარის ინფორმაციას იმისთვის, რომ პატერნების გამოყენება დავიწყოთ ჩვენს სკრიპტებში, ფლაგინებსა თუ ვებ-აპლიკაციებში.
+
+მნიშვნელოვანია ჩვენთვის, ვიცოდეთ ეს პატერნები, მაგრამ ასევე მნიშვნელოვანია ვიცოდეთ, როგორ და როდის გამოვიყენოთ ისინი.
+
+თუ ამ თეზისმა გააღვივა ინტერესი პატერნების უფრო სიღრმისეულად სწავლისა, არსებობს ბევრი საოცარი წიგნი ამ სივრცეზე, ხელმისაწვდომი როგორც ძირითადი პროგრამული ინჟინერიისთვის, ასევე Javascript-ისთვის.
+
+მოხარული ვიქნები, რეკომენდაცია გავუწიო ორ საინტერესო რესურსს:
+
+- [Patterns Of Enterprise Application Architecture](https://www.amazon.com/Patterns-Enterprise-Application-Architecture-Martin/dp/0321127420) by Martin Fowler
+- [Javascript Design Patterns](https://www.amazon.com/Learning-JavaScript-Design-Patterns-Developers/dp/1449331815/ref=sr_1_3?ie=UTF8&qid=1529108307&sr=8-3&keywords=javascript+design+pattern) by Addy Osmani
