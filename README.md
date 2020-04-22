@@ -2,7 +2,7 @@
 
 ##### როგორ ვწეროთ უკეთესი კოდი დიზაინ პატერნების დახმარებით
 
-_Bachelors thesis in Computer Sciences. Supervisor: Nino Kiviladze_
+_Bachelor's thesis in Computer Science. Supervisor: Nino Kiviladze_
 
 ## <a name='TOC'>სარჩევი</a>
 
